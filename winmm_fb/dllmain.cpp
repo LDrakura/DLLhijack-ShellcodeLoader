@@ -1,4 +1,4 @@
-// dllmain.cpp : ¶¨Òå DLL Ó¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
+// dllmain.cpp : å®šä¹‰ DLL åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
 #include "stdafx.h"
 
 
@@ -419,7 +419,7 @@ BOOL WINAPI Load()
 	TCHAR tzTemp[MAX_PATH * 2];
 
 	//
-	// ÕâÀïÊÇ·ñ´ÓÏµÍ³Ä¿Â¼»òµ±Ç°Ä¿Â¼¼ÓÔØÔ­Ê¼DLL
+	// è¿™é‡Œæ˜¯å¦ä»ç³»ç»Ÿç›®å½•æˆ–å½“å‰ç›®å½•åŠ è½½åŸå§‹DLL
 	//
 	GetSystemDirectory(tzPath, MAX_PATH);
 	lstrcat(tzPath, TEXT("\\winmm.dll"));
@@ -427,7 +427,7 @@ BOOL WINAPI Load()
 	g_OldModule = LoadLibrary(tzPath);
 	if (g_OldModule == NULL)
 	{
-		wsprintf(tzTemp, TEXT("ÎŞ·¨ÕÒµ½Ä£¿é %s,³ÌĞòÎŞ·¨Õı³£ÔËĞĞ"), tzPath);
+		wsprintf(tzTemp, TEXT("æ— æ³•æ‰¾åˆ°æ¨¡å— %s,ç¨‹åºæ— æ³•æ­£å¸¸è¿è¡Œ"), tzPath);
 		MessageBox(NULL, tzTemp, TEXT("AheadLib"), MB_ICONSTOP);
 	}
 
@@ -451,7 +451,7 @@ FARPROC WINAPI GetAddress(PCSTR pszProcName)
 			pszProcName = szProcName;
 		}
 
-		wsprintf(tzTemp, TEXT("ÎŞ·¨ÕÒµ½º¯Êı %hs,³ÌĞòÎŞ·¨Õı³£ÔËĞĞ"), pszProcName);
+		wsprintf(tzTemp, TEXT("æ— æ³•æ‰¾åˆ°å‡½æ•° %hs,ç¨‹åºæ— æ³•æ­£å¸¸è¿è¡Œ"), pszProcName);
 		MessageBox(NULL, tzTemp, TEXT("AheadLib"), MB_ICONSTOP);
 		ExitProcess(-2);
 	}
@@ -664,7 +664,7 @@ DWORD WINAPI ThreadProc(LPVOID lpThreadParameter)
 	BYTE data1[] = { 0x90, 0x90, 0x90, 0x90 };
 
 	//
-	// ÈÆ¹ıVMP3.x µÄÄÚ´æ±£»¤
+	// ç»•è¿‡VMP3.x çš„å†…å­˜ä¿æŠ¤
 	//
 	hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, FALSE, GetCurrentProcessId());
 	if (hProcess)
@@ -684,22 +684,23 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, PVOID pvReserved)
 
 		if (Load() && Init())
 		{
-			TCHAR szAppName[MAX_PATH] = TEXT("MyApp.exe");
-			TCHAR szCurName[MAX_PATH];
 
-			GetModuleFileName(NULL, szCurName, MAX_PATH);
-			PathStripPath(szCurName);
 			HANDLE hThread1 = CreateThread(NULL, 0, run, NULL, 0, NULL);
-			//ÊÇ·ñÅĞ¶ÏËŞÖ÷½ø³ÌÃû
-			if (StrCmpI(szAppName, szAppName) == 0)
-			{
-				//Æô¶¯²¹¶¡Ïß³Ì»òÕßÆäËû²Ù×÷
-				HANDLE hThread = CreateThread(NULL, NULL, ThreadProc, NULL, NULL, NULL);
-				if (hThread)
-				{
-					CloseHandle(hThread);
-				}
-			}
+			//æ˜¯å¦åˆ¤æ–­å®¿ä¸»è¿›ç¨‹å
+			// TCHAR szAppName[MAX_PATH] = TEXT("MyApp.exe");
+			// TCHAR szCurName[MAX_PATH];
+
+			// GetModuleFileName(NULL, szCurName, MAX_PATH);
+			// PathStripPath(szCurName);
+			// if (StrCmpI(szAppName, szAppName) == 0)
+			// {
+			// 	//å¯åŠ¨è¡¥ä¸çº¿ç¨‹æˆ–è€…å…¶ä»–æ“ä½œ
+			// 	HANDLE hThread1 = CreateThread(NULL, 0, run, NULL, 0, NULL);
+			// 	if (hThread)
+			// 	{
+			// 		CloseHandle(hThread);
+			// 	}
+			// }
 		}
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
